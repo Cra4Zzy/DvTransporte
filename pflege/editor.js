@@ -1,0 +1,27 @@
+(()=>{'use strict';
+const $=id=>document.getElementById(id),fields=['title','text','category','date','image','imageAlt','link','linkLabel','published'];
+let posts=JSON.parse(JSON.stringify(window.DV_NEWS?.items||[])),selected=posts.length?0:-1,deleted=null,dirty=false;
+const photos=['growth-handshake.webp','load-wood-side.webp','machine-load.webp','operations-pipes.webp','load-warehouse.webp','special-crane.webp','curtain-load.webp','front-truck.webp','red-truck.webp','hero-home.webp'];
+photos.forEach(name=>{const option=document.createElement('option');option.value=name;$('images').append(option);});
+function status(message){$('status').textContent=message;}
+function list(){const el=$('post-list');el.replaceChildren();posts.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='post-button';b.setAttribute('aria-pressed',String(i===selected));const title=document.createElement('strong');title.textContent=p.title||'Neuer Beitrag';const state=document.createElement('small');state.textContent=(p.published?'Sichtbar':'Entwurf')+' · '+(i+1);b.append(title,state);b.addEventListener('click',()=>{selected=i;load();});el.append(b);});}
+function preview(){const p=posts[selected];$('preview-title').textContent=p?.title||'Neuer Beitrag';$('preview-text').textContent=p?.text||'';$('preview-category').textContent=p?.category||'';$('preview-link').textContent=p?.link?(p.linkLabel||'Mehr erfahren')+' ↗':'';const image=$('preview-image');if(p&&/^[a-zA-Z0-9_-]+\.(webp|png|jpe?g)$/.test(p.image||'')){image.hidden=false;image.src='../assets/images/'+p.image;image.alt=p.imageAlt||'';}else{image.hidden=true;image.removeAttribute('src');}}
+$('preview-image').addEventListener('error',()=>{$('preview-image').hidden=true;status('Das Bild ist hier nicht vorhanden. Lege es auch im lokalen Ordner assets/images ab.');});
+function load(){const p=posts[selected];$('edit-form').hidden=!p;$('empty').hidden=!!p;if(p)fields.forEach(k=>{if(k==='published')$(k).checked=!!p[k];else $(k).value=p[k]||'';});$('up').disabled=selected<=0;$('down').disabled=selected<0||selected>=posts.length-1;list();preview();}
+function changed(){dirty=true;status('Ungespeicherte Änderungen – bitte herunterladen, bevor du das Fenster schließt.');}
+fields.forEach(k=>$(k).addEventListener('input',()=>{if(selected<0)return;posts[selected][k]=k==='published'?$(k).checked:$(k).value;changed();list();preview();}));
+$('edit-form').addEventListener('submit',e=>e.preventDefault());
+$('add').addEventListener('click',()=>{posts.unshift({id:'beitrag-'+Date.now(),title:'',text:'',category:'Neuigkeiten',date:'',image:'',imageAlt:'',link:'kontakt/index.html#anfrage',linkLabel:'Anfragen',published:false});selected=0;changed();load();$('title').focus();});
+$('remove').addEventListener('click',()=>{if(selected<0)return;deleted={post:posts.splice(selected,1)[0],index:selected};selected=Math.min(selected,posts.length-1);$('undo').hidden=false;changed();load();});
+$('undo').addEventListener('click',()=>{if(!deleted)return;selected=Math.min(deleted.index,posts.length);posts.splice(selected,0,deleted.post);deleted=null;$('undo').hidden=true;changed();load();});
+function move(delta){const next=selected+delta;if(next<0||next>=posts.length)return;[posts[next],posts[selected]]=[posts[selected],posts[next]];selected=next;changed();load();}
+$('up').addEventListener('click',()=>move(-1));$('down').addEventListener('click',()=>move(1));
+$('export').addEventListener('click',()=>{
+ const bad=posts.findIndex(p=>p.published&&(!p.title.trim()||!p.text.trim()|| (p.image&&!/^[a-zA-Z0-9_-]+\.(webp|png|jpe?g)$/.test(p.image))));
+ if(bad>=0){selected=bad;load();status('Bitte Titel, Text und Bilddateiname des markierten sichtbaren Beitrags prüfen.');return;}
+ const source='// Mit dem lokalen DV-Beitragseditor erstellt.\nwindow.DV_NEWS = '+JSON.stringify({items:posts},null,2).replace(/</g,'\\u003c')+';\n';
+ const url=URL.createObjectURL(new Blob([source],{type:'text/javascript;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='neuigkeiten.js';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);dirty=false;status('Download gestartet. Ersetze damit assets/js/neuigkeiten.js auf dem Webspace. Die Website wurde noch nicht verändert.');
+});
+$('import').addEventListener('change',async event=>{const file=event.target.files[0];if(!file)return;if(file.size>1000000){status('Die Datei ist zu groß. Bitte nur die Inhaltsdatei neuigkeiten.js laden.');return;}if(dirty&&!confirm('Ungespeicherte Änderungen durch die geladene Datei ersetzen?')){event.target.value='';return;}try{const text=await file.text();const match=text.match(/window\.DV_NEWS\s*=\s*([\s\S]*?)\s*;?\s*$/);const data=JSON.parse(match?match[1]:text);if(!Array.isArray(data.items)||data.items.length>100)throw Error();posts=data.items.map(p=>{if(!p||typeof p!=='object')throw Error();const item={id:typeof p.id==='string'?p.id:'beitrag-'+Math.random().toString(36).slice(2)};fields.forEach(k=>item[k]=k==='published'?p[k]!==false:(typeof p[k]==='string'?p[k]:''));return item;});selected=posts.length?0:-1;dirty=false;deleted=null;$('undo').hidden=true;load();status('Inhaltsdatei geladen. Du kannst sie jetzt bearbeiten.');}catch{status('Diese Datei enthält keine gültigen DV-Neuigkeiten. Es wurde nichts importiert.');}event.target.value='';});
+addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});load();
+})();
