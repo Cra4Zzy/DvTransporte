@@ -1,0 +1,6 @@
+VOR VERÖFFENTLICHUNG
+[ ] Desktop und Smartphone: Darstellung, Menü, Leistungswahl und Galerie prüfen.
+[ ] Firmenangaben, Leistungsumfang und Fuhrparkgröße bestätigen.
+[ ] Übernommene Rechtstexte auf Vollständigkeit und tatsächliches Hosting abstimmen.
+[ ] PHP-Mailversand: echte Testanfrage, Zustellung und Reply-To prüfen.
+[ ] Domain/HTTPS, Weiterleitungen und 404-Seite auf dem Zielhosting prüfen.
