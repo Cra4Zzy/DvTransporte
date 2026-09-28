@@ -28,3 +28,41 @@
 .company-proof-grid p{color:var(--muted)}
 .company-proof-grid small{display:block;margin-top:22px;color:var(--muted);font-size:14px}
 @media(max-width:760px){.dispatch-section,.company-proof-grid{grid-template-columns:1fr}.dispatch-links{flex-direction:column;align-items:flex-start}.dispatch-section{gap:28px}.company-proof-grid{gap:16px}}
+
+/* DV TRANSPORTE — CI REFRESH 2026-09 */
+:root{--dv-navy:#02182A;--dv-navy-soft:#233C4B;--dv-gold:#CAB996;--dv-gold-deep:#A88B59;--dv-steel:#AABAC6;--dv-steel-light:#EAF0F3}
+body{background:#F8FAFB;color:var(--dv-navy)}
+.site-header{background:rgba(248,250,251,.97);border-bottom-color:#D8E0E6}
+.brand>span,.header-inner nav a,.header-contact{color:var(--dv-navy)}
+.header-inner nav a:after,.scroll-progress,.micro-line{background:var(--dv-gold-deep)}
+.header-contact>span{color:var(--dv-gold-deep)}
+.button{background:var(--dv-gold);color:var(--dv-navy);box-shadow:none}
+.button:hover{background:var(--dv-gold-deep);color:#fff}
+::selection{background:var(--dv-gold);color:var(--dv-navy)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline-color:var(--dv-gold-deep)}
+h1 span,h2 span{color:var(--dv-gold-deep)}
+.service-select[aria-expanded=true]{color:var(--dv-gold-deep)}
+.service-image figcaption{background:linear-gradient(transparent,rgba(2,24,42,.92))}
+.spec-strip,.fleet-section{background:var(--dv-navy)}
+.fleet-copy h2 span{color:var(--dv-gold)}
+.fleet-stamp{background:var(--dv-gold);color:var(--dv-navy)}
+.gallery-item>span>span,.news-meta,.gallery-slide__copy>.label{color:var(--dv-gold-deep)}
+.contact-person,.dispatch-card{border-left-color:var(--dv-gold)}
+.contact-cta{background:var(--dv-gold);color:var(--dv-navy)}
+.contact-cta .label,.contact-cta a,.contact-cta p{color:var(--dv-navy)}
+.cta-top,.cta-bottom{border-color:rgba(2,24,42,.22)}
+.footer{background:var(--dv-navy);color:#fff}
+.footer-wordmark span{color:#B7C3CC}
+.footer .label{color:var(--dv-gold)}
+.gallery-slide__media{background:var(--dv-navy-soft)}
+.gallery-slide--portrait .gallery-slide__media{background:var(--dv-navy)}
+.gallery-slide__media:after{background:linear-gradient(transparent,rgba(2,24,42,.72))}
+.gallery-slide__media:hover .gallery-slide__zoom b{background:var(--dv-gold);border-color:var(--dv-gold);color:var(--dv-navy)}
+.gallery-slide__rule,.gallery-slider__progress span,.gallery-slider__pagination button:hover:before,.gallery-slider__pagination button[aria-current="true"]:before{background:var(--dv-gold)}
+.news-filters button[aria-pressed=true]{background:var(--dv-navy);border-color:var(--dv-navy)}
+.dispatch-links a:hover{color:var(--dv-gold-deep);border-color:var(--dv-gold-deep)}
+.form-card{background:#fff;box-shadow:0 18px 60px rgba(2,24,42,.08)}
+.company-growth{background:var(--dv-navy);color:#fff}
+.company-growth h2 span{color:var(--dv-gold)}
+.owner-photo>span{background:var(--dv-navy)}
+.photo-caption a:hover{background:var(--dv-gold);color:var(--dv-navy)}
